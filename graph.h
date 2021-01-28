@@ -4,6 +4,9 @@
 #include <iostream>
 #include <vector>
 #include <assert.h>
+#include <queue>
+#include <assert.h>
+
 
 template <typename T>
 struct graphEdge {
@@ -25,7 +28,7 @@ public:
 		directed = dir;
 		A = new graphEdge<T> * [vertexNumber]; 
 	}
-	~Graph();
+	~Graph() { };
 
 	bool is_directed() const { return directed; }
 	int getV() { return vertexNumber; }
@@ -35,6 +38,9 @@ public:
 	bool hasEdge(int v1, int v2);
 	void display();
 	void clear();
+	void DFS(int v);
+	void DFS(int v, bool visited[]);
+	void BFS(int v);
 };
 
 template<typename T>
@@ -117,6 +123,54 @@ void Graph<T>::clear() {
 		while(p) {
 			removeEdge(i, p->value);
 			p = A[i];
+		}
+	}
+}
+
+template<typename T>
+void Graph<T>::DFS(int v) {
+	bool *visited = new bool[vertexNumber];
+	for(int i = 0; i < vertexNumber; i++) {
+		visited[i] = false;
+	}
+
+	DFS(v, visited);
+}
+
+template<typename T>
+void Graph<T>::DFS(int v, bool visited[]) {
+	graphEdge<T> *p;
+  	visited[v] = true;
+ 	std::cout << v << " ";
+
+  	for(p = A[v]; p; p = p->next)
+    	if(!visited[p->value]) 
+    		DFS(p->value, visited);
+}
+
+template<typename T>
+void Graph<T>::BFS(int v) {
+	graphEdge<T> *p;
+	bool *visited = new bool[vertexNumber];
+	for(int i = 0; i < vertexNumber; i++) {
+		visited[i] = false;
+	}
+
+	std::queue<T> queue; 
+
+	visited[v] = true;
+	queue.push(v);
+
+	while(!queue.empty()) {
+		v = queue.front();
+		std::cout << v << " ";
+		queue.pop();
+
+		for(p = A[v]; p; p = p->next) {
+			if(!visited[p->value]) {
+				visited[p->value] = true;
+				queue.push(p->value);
+			}
 		}
 	}
 }

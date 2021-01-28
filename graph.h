@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <assert.h>
 
 template <typename T>
 struct graphEdge {
@@ -13,71 +14,111 @@ struct graphEdge {
 template<typename T>
 class Graph {
 	graphEdge<T> ** A;
+	bool directed;
+
+	int vertexNumber;
+	int edgeNumber = 0;
+	bool hasNext(int v1, int v2);
 public:
-	int size;
-	Graph(int n) { 
-		size = n;
-		A = new graphEdge<T> * [size]; 
+	Graph(int n, bool dir) { 
+		vertexNumber = n;
+		directed = dir;
+		A = new graphEdge<T> * [vertexNumber]; 
 	}
-	~Graph() { ; }
-	void addEdge(int v1, int v2) {
+	~Graph();
+
+	bool is_directed() const { return directed; }
+	int getV() { return vertexNumber; }
+	int getE() { return edgeNumber; }
+	bool addEdge(int v1, int v2);
+	void removeEdge(int v1, int v2);
+	bool hasEdge(int v1, int v2);
+	void display();
+	void clear();
+};
+
+template<typename T>
+bool Graph<T>::addEdge(int v1, int v2)  {
+
+	if(v1 < vertexNumber && v2 < vertexNumber && !hasEdge(v1,v2)) {
 		graphEdge<T> *p;
+
 		p = new graphEdge<T>;
 		p->value = v2;
 		p->next = A[v1];
 		A[v1] = p; 
-	}
-	void removeEdge(int v1, int v2) {
-		if(hasEdge(v1, v2)) {
-			graphEdge<T> *p;
-			p = A[v1];
-			
+
+		if(!directed) {
+			addEdge(v2,v1);
 		}
-	}
-	bool hasEdge(int v1, int v2) {
-		graphEdge<T> *p;
+
+		edgeNumber++;
+		return true;
+	} else return false;
+}
+
+template<typename T>
+void Graph<T>::removeEdge(int v1, int v2) {
+	if(hasEdge(v1, v2)) {
+		graphEdge<T> *p, *q;
 		p = A[v1];
-		while(p) {
-			if(p->value == v2)
-				return true;
-			p = p->next;
+
+		if(A[v1]->value == v2) {
+			A[v1] = p->next;
+			delete p;
+		} else {
+			while(p->next->value != v2) {
+				p = p->next;
+			} 
+			q = p->next;
+			p->next = q->next;
+			delete q;
 		}
-		return false;
+
+		if(!directed) {
+			removeEdge(v2, v1);
+		}
+
+		edgeNumber--;
 	}
-	void display() {
-		graphEdge<T> *p;
-		for(int i = 0; i < size; i++) {
-			std::cout << "A [ " << i << " ] = ";
+}
+
+template<typename T>
+bool Graph<T>::hasEdge(int v1, int v2) {
+	graphEdge<T> *p;
+	p = A[v1];
+	while(p) {
+		if(p->value == v2)
+			return true;
+		p = p->next;
+	}
+	return false;
+}
+
+template<typename T>
+void Graph<T>::display() {
+	graphEdge<T> *p;
+	for(int i = 0; i < vertexNumber; i++) {
+			std::cout << "A[" << i << "] = ";
 			p = A[i];
 			while(p) {
 				std::cout << " " << p->value;
 				p = p->next;
 			}
 			std::cout << std::endl;
-		}
 	}
-	int edgeCount() {
-		graphEdge<T> *p;
-		int counter = 0;
-		for(int i = 0; i < size; i++) {
+}
+
+template<typename T>
+void Graph<T>::clear() {
+	graphEdge<T> *p;
+	for(int i = 0; i < vertexNumber; i++) {
+		p = A[i];
+		while(p) {
+			removeEdge(i, p->value);
 			p = A[i];
-			while(p) {
-				counter++;
-				p = p->next;
-			}
 		}
-		return counter;
 	}
-
-
-};
+}
 
 #endif
-
-
-    // cin >> 0 >> 1;    // Wierzchołek startowy i końcowy krawędzi
-    // p = new slistEl;    // Tworzymy nowy element
-    // p->v = 1;          // Numerujemy go jako v2
-    // p->next = A [ 0 ]; // Dodajemy go na początek listy A [ v1 ] 
-    // A [ 0 ] = p;
-  

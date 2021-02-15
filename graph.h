@@ -32,7 +32,7 @@ public:
 
 	bool is_directed() const { return directed; }
 	int getV() { return vertexNumber; }
-	int getE() { return edgeNumber; }
+	int getE();
 	bool addEdge(int v1, int v2);
 	void removeEdge(int v1, int v2);
 	bool hasEdge(int v1, int v2);
@@ -42,6 +42,17 @@ public:
 	void DFS(int v, bool visited[]);
 	void BFS(int v);
 };
+
+template<typename T>
+int Graph<T>::getE()  {
+
+	if(directed) {
+		return edgeNumber;
+	} else {
+		return edgeNumber/2;
+	}
+}
+
 
 template<typename T>
 bool Graph<T>::addEdge(int v1, int v2)  {
@@ -58,7 +69,7 @@ bool Graph<T>::addEdge(int v1, int v2)  {
 			addEdge(v2,v1);
 		}
 
-		edgeNumber++;
+		edgeNumber++++;;
 		return true;
 	} else return false;
 }
@@ -105,7 +116,7 @@ template<typename T>
 void Graph<T>::display() {
 	graphEdge<T> *p;
 	for(int i = 0; i < vertexNumber; i++) {
-			std::cout << "A[" << i << "] = ";
+			std::cout << i << ":";
 			p = A[i];
 			while(p) {
 				std::cout << " " << p->value;

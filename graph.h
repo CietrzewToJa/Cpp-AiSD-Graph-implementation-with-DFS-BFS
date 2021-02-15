@@ -57,7 +57,8 @@ int Graph<T>::getE()  {
 template<typename T>
 bool Graph<T>::addEdge(int v1, int v2)  {
 
-	if(v1 < vertexNumber && v2 < vertexNumber && !hasEdge(v1,v2)) {
+	if(v1 < vertexNumber && v2 < vertexNumber && !hasEdge(v1,v2)
+		&& v1 >= 0 && v2 >= 0) {
 		graphEdge<T> *p;
 
 		p = new graphEdge<T>;
@@ -69,7 +70,7 @@ bool Graph<T>::addEdge(int v1, int v2)  {
 			addEdge(v2,v1);
 		}
 
-		edgeNumber++++;;
+		edgeNumber++;
 		return true;
 	} else return false;
 }

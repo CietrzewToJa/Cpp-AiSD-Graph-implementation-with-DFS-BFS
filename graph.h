@@ -28,7 +28,12 @@ public:
 		directed = dir;
 		A = new graphEdge<T> * [vertexNumber]; 
 	}
-	~Graph() { };
+	~Graph() { 
+		clear();
+		for(int i = 0; i < vertexNumber; i++) {
+			delete A[i];
+		}
+	};
 
 	bool is_directed() const { return directed; }
 	int getV() { return vertexNumber; }

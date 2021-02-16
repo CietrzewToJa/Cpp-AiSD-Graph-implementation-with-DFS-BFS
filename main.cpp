@@ -6,7 +6,7 @@ void test_addEdge() {
 	graf.addEdge(0, 5);
 	assert(graf.hasEdge(0,5) == 0 && graf.getE() == 0);
 	graf.addEdge(0, 1);
-	assert(graf.hasEdge(0,1) == 1 && graf.getE() == 2);
+	assert(graf.hasEdge(0,1) == 1 && graf.getE() == 1);
 	graf.addEdge(1, 2);
 	graf.addEdge(1, 3);
 	graf.addEdge(1, 4);
@@ -15,7 +15,8 @@ void test_addEdge() {
 	graf.addEdge(1, 5);
 	graf.addEdge(1, 6);
 	graf.display();
-	assert(graf.getE() == 8);
+	assert(graf.getE() == 4);
+
 	Graph<int> graf2(5, true);
 	graf2.addEdge(0, 5);
 	assert(graf2.hasEdge(0,5) == 0 && graf2.getE() == 0);
@@ -28,6 +29,7 @@ void test_addEdge() {
 	graf2.addEdge(1, 5);
 	graf2.addEdge(1, 5);
 	graf2.addEdge(1, 6);
+	graf2.display();
 	assert(graf2.getE() == 4);
 
 }
@@ -55,12 +57,12 @@ void test_removeEdge() {
 	graf2.addEdge(1, 2);
 	graf2.addEdge(1, 3);
 	graf2.addEdge(2, 1);
-	assert(graf2.getE() == 10);
+	assert(graf2.getE() == 5);
 	graf2.removeEdge(0, 2);
 	graf2.removeEdge(0, 1);
 	graf2.removeEdge(1, 3);
 	graf2.removeEdge(2, 1);
-	assert(graf2.getE() == 2);
+	assert(graf2.getE() == 1);
 }
 
 void test_clear() {
